@@ -22,6 +22,7 @@ display and the other devices.
         -   [Schematic](#schematic)
         -   [Cable](#cable)
 *   [Software](#software)
+    +   [Pre-built OS Image](#pre-built-os-image)
     +   [Armbian](#armbian)
         -   [Custom Devive Tree Overlays](#custom-devive-tree-overlays)
     +   [Status LED](#status-led)
@@ -192,6 +193,35 @@ black wire for the ground connection to OPiZ pin 25 provides a convenient way to
 align the connector, regardless of the other wire colours.
 
 ## Software
+### Pre-built OS Image
+There's a pre-built Armbian image at
+[moonbuggy/sbc-os-images/Orange-Pi-Zero-TFT-GPS-NTP-Server](https://github.com/moonbuggy/sbc-os-images/tree/main/Orange-Pi-Zero-TFT-GPS-NTP-Server)
+which will work out of the box for a build using the same (or compatible)
+hardware wired as described. All the setup and configuration steps below have
+been done during the image creation.
+
+GPS devices other than the Neo M8N should work easily with this image, so long
+as they use _uart2_ (and use _pin 15_/_PA03_ for the PPS signal). A different
+display controller or RTC, however, would be incompatible with the device tree
+in the image.
+
+It's possible to re-configure the pre-built OS after first boot, if necessary
+to adjust for differing hardware. Depending on how much modification is needed,
+it may be easier to start with a bare OS and do the manual steps described
+below.
+
+The [Orange-Pi-Zero-TFT-GPS-NTP-Server/debs/](https://github.com/moonbuggy/sbc-os-images/tree/main/Orange-Pi-Zero-TFT-GPS-NTP-Server/debs)
+folder contains packages which can be installed on top of an existing Armbian
+install, with:
+
+```sh
+sudo dpkg -i os/deb/*.deb
+sudo dpkg -i os/deb/bookworm/*.deb
+```
+
+These packages just add the modules necessary for the GPIO power switch to work
+to the kernel and do not install any software or handle any the configuration.
+
 ### Armbian
 We need to enable the _i2c0_, _pps-gpio_, _tve_ and _uart2_ devices. It probably
 makes sense to enable _clock-1.2GHz-1.3v_ as well, if it isn't by default. This
@@ -388,6 +418,7 @@ More detail and configuration information is available at [moonbuggy/fbgpsclock]
 ## Links
 ### Software
 *   [moonbuggy/fbgpsclock][moonbuggy/fbgpsclock]
+*   [moonbuggy/sbc-os-images][moonbuggy/sbc-os-images]
 
 ### Hardware
 *   [moonbuggy/GPIO-power-switch][moonbuggy/GPIO-power-switch]
@@ -398,4 +429,5 @@ More detail and configuration information is available at [moonbuggy/fbgpsclock]
 *   [ST7789V](https://newhavendisplay.com/content/datasheets/ST7789V.pdf)
 
 [moonbuggy/fbgpsclock]: https://github.com/moonbuggy/fbgpsclock
+[moonbuggy/sbc-os-images]: https://github.com/moonbuggy/sbc-os-images
 [moonbuggy/GPIO-power-switch]: https://github.com/moonbuggy/GPIO-power-switch
